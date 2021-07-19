@@ -1,9 +1,9 @@
-andrewrothstein.rolename
+andrewrothstein.burrow
 =========
 
-![Build Status](https://github.com/andrewrothstein/ansible-rolename/actions/workflows/build.yml/badge.svg)
+![Build Status](https://github.com/andrewrothstein/ansible-burrow/actions/workflows/build.yml/badge.svg)
 
-A brief description of the andrewrothstein.rolename goes here.
+Installs [burrow](https://github.com/linkedin/Burrow)
 
 Requirements
 ------------
@@ -26,7 +26,7 @@ Example Playbook
 ```yml
 - hosts: servers
   roles:
-    - andrewrothstein.rolename
+    - andrewrothstein.burrow
 ```
 
 License
