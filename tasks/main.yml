@@ -1,0 +1,56 @@
+---
+- name: resolve platform specific vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - files:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
+        - '{{ ansible_distribution }}.yml'
+        - '{{ ansible_os_family }}.yml'
+      skip: true
+      paths:
+        - '{{ role_path }}/vars'
+- name: check for install at {{ burrow_exe }}
+  become: yes
+  stat:
+    path: '{{ burrow_exe }}'
+  changed_when: false
+  register: burrow_binary
+- when: not burrow_binary.stat.exists
+  block:
+    - name: downloading {{ burrow_url }}...
+      become: true
+      become_user: root
+      get_url:
+        url: '{{ burrow_url }}'
+        dest: '{{ burrow_tmp_tgz }}'
+        mode: 0644
+        checksum:  '{{ burrow_checksum }}'
+    - name: mkdir {{ burrow_install_dir }}
+      become: true
+      become_user: root
+      file:
+        path: '{{ burrow_install_dir }}'
+        state: directory
+        mode: 0755
+    - name: unarchive {{ burrow_tmp_tgz }} to {{ burrow_install_dir }}
+      become: true
+      become_user: root
+      unarchive:
+        remote_src: true
+        src: '{{ burrow_tmp_tgz }}'
+        dest: '{{ burrow_install_dir }}'
+        creates: '{{ burrow_exe }}'
+  always:
+    - name: rm -f {{ burrow_tmp_tgz }}
+      become: true
+      become_user: root
+      file:
+        path: '{{ burrow_tmp_tgz }}'
+        state: absent
+- name: linking {{ burrow_link }} to {{ burrow_exe }}
+  become: true
+  become_user: root
+  file:
+    src: '{{ burrow_exe }}'
+    dest: '{{ burrow_link }}'
+    state: link

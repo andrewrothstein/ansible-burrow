@@ -1,0 +1,11 @@
+---
+# vars file for burrow
+burrow_platform: '{{ burrow_os }}_{{ burrow_arch }}'
+burrow_name: Burrow_{{ burrow_ver }}_{{ burrow_platform }}
+burrow_tgz: '{{ burrow_name }}.tar.gz'
+burrow_tmp_tgz: /tmp/{{ burrow_tgz }}
+burrow_url: '{{ burrow_mirror }}/v{{ burrow_ver }}/{{ burrow_tgz }}'
+burrow_checksum: '{{ burrow_checksums[burrow_ver][burrow_platform] }}'
+burrow_install_dir: '{{ burrow_parent_install_dir }}/{{ burrow_name }}'
+burrow_exe: '{{ burrow_install_dir }}/burrow'
+burrow_link: '{{ burrow_parent_install_dir }}/bin/burrow'
